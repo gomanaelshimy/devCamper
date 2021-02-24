@@ -66,6 +66,22 @@ exports.getMe = asyncHandler(async(req,res,next)=>{
     });
 })
 
+//@description Log user out /clear cookie
+//@route Get /api/v1/auth/logout
+//@access Private
+
+exports.logout = asyncHandler(async(req,res,next)=>{
+
+res.cookie('token', 'none',{
+    expires: new Date(Date.now()+10*1000),
+    httpOnly:true
+})   
+ res.status(200).json({
+        sucess: true,
+        data: {}
+    });
+})
+
 //@description Update user details
 //@route put /api/v1/auth/updatedetails
 //@access Private
@@ -176,5 +192,6 @@ const sendTokenResponse= (user, statusCode, res) => {
     if(process.env.NODE_ENV==='production'){
         options.secure=true;
     }
+
     res.status(statusCode).cookie('token',token,options).json({sucess:true,token});
 }
